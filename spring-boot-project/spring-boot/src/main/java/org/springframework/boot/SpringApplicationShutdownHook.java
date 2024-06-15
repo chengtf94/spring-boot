@@ -69,6 +69,9 @@ class SpringApplicationShutdownHook implements Runnable {
 		return this.handlers;
 	}
 
+	/**
+	 * 注册ShutdownHook：Spring应用程序本质上也是一个 JVM 进程，所以其实现优雅关闭机制也必须依托于 JVM 的 ShutdownHook 机制
+	 */
 	void registerApplicationContext(ConfigurableApplicationContext context) {
 		addRuntimeShutdownHookIfNecessary();
 		synchronized (SpringApplicationShutdownHook.class) {
@@ -86,6 +89,7 @@ class SpringApplicationShutdownHook implements Runnable {
 
 	void addRuntimeShutdownHook() {
 		try {
+			// 注册ShutdownHook
 			Runtime.getRuntime().addShutdownHook(new Thread(this, "SpringApplicationShutdownHook"));
 		}
 		catch (AccessControlException ex) {
